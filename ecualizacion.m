@@ -1,32 +1,31 @@
 function [y] = ecualizacion(imagen)
-%[filas, columnas] = size(imagen);
-%y = zeros(256);
-%    for l = 0 : 1 : 255
-%        for greyScale = 0 : 1 : l
-%            [cantGris, x] = size ( find ( imagen == greyScale ) );
-%            y(l + 1) = y(l + 1) + ( cantGris  / ( filas * columnas ) );
-%        end
-%    end
-%minimo = min(y);
-%for i = 1 : 1 : 256
-%    y(i) = floor( ( ( y(i) - minimo )/ ( 1 - minimo ) * 255 ) + 0.5); 
-[filas, columnas] = size(imagen);
-y = imagen;
-for fila = 1 : 1 : filas
+  %inicializo un vector que va a contener el histograma
+  histogramaNormalizado = zeros(1, 256);
+  [filas, columnas] = size(imagen);
+  for i = 1 : 1 : 256
+    [grises, x] = size (find (imagen == i - 1) );
+    % en la posicion iesima de histogramaNormalizado
+    % tengo el nivel de gris i - 1
+    histogramaNormalizado(i) = grises / (filas*columnas);
+  end
+  %histogramaNormalizado pasa a tener los valores acumulados
+  for index = 2 : 1 : 256
+    histogramaNormalizado(index) = histogramaNormalizado(index) + histogramaNormalizado(index - 1);
+  end
+  minimo = min (histogramaNormalizado);
+  y = imagen;
+  for fila = 1 : 1 : filas
     for columna = 1 : 1 : columnas
-        grisActual = imagen(fila, columna);
-        grisFinal = 0;
-        for escalaGrises = 0 : 1 : grisActual
-            [cantGris, x] = size ( find ( imagen == escalaGrises ) );
-            grisFinal = grisFinal + (cantGris / (filas*columnas));
-        end
-        y(fila, columna) = grisFinal;
+      %selecciono el valor de gris del pixel actual
+      grisEnPosicion = imagen(fila, columna);
+      %selecciono el valor de T(rk) que va a tener el pixel en la nueva imagen
+      sactual = histogramaNormalizado(grisEnPosicion + 1);
+      %llevo el valor de gris al rango [0..255]
+      y(fila, columna) = valorEnRango(minimo, sactual);
     end
+  end
 end
-minimo = min (min (y) );
-for fila = 1 : 1 : filas
-    for columna = 1 : 1 : columnas
-        y(fila, columna) = floor( ( (y(fila, columna) - minimo) / (1 - minimo) * 255) + 0.5 );
-    end
+
+function [x] = valorEnRango(smin, sactual)
+  x = floor( ((sactual - smin)/(1 - smin)*255) + 0.5);
 end
-end  

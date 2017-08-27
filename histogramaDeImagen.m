@@ -4,4 +4,7 @@ function [y] = histogramaDeImagen(imagen)
     [cantidadConGrisX, x] = size( find (imagen == escalaGris) );
     y (escalaGris + 1) = cantidadConGrisX;
   end
+  figure("numbertitle", 'off', "name", 'Histograma de imagen');
+  bar(y);
+  title('Histograma de imagen');
 end

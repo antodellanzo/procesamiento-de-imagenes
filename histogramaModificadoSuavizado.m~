@@ -1,16 +1,4 @@
-function [] = histogramaModificadoSuavizadoVariandoParametros(imagen)
-  for lambda = [1, 5, 10, 15, 20]
-    for gamma = [1, 50, 100, 150, 200]
-      if gamma == 0
-        histogramaModificadoSuavizado(imagen, lambda, 1);
-      else
-        histogramaModificadoSuavizado(imagen, lambda, gamma);
-      end
-    end
-  end
-end
-
-function [] = histogramaModificadoSuavizado(imagenOriginal, lambda, gamma)
+function [y] = histogramaModificadoSuavizado(imagenOriginal, lambda, gamma)
     if size(imagenOriginal) > 2
         imagen = imagenOriginal(:, :, 1);
     else
@@ -30,25 +18,23 @@ function [] = histogramaModificadoSuavizado(imagenOriginal, lambda, gamma)
   aux = h0 + lambda.*histogramaUniforme;
   primerOperando = (1 + lambda).*identidad;
   segundoOperando = gamma.*(transpose(D)*D);
-  h_monio = aux/(primerOperando + segundoOperando);
+  h_monio = inv(primerOperando + segundoOperando) * transpose(aux);
   
   %normalizo el histograma
   h_monio = h_monio ./ (filas*columnas);
   
-  %grafico los histogramas
-  str = sprintf('\\lambda = %d, \\gamma = %d', lambda, gamma);
-  figure('numbertitle', 'off', 'name', str);
-  subplot(1, 2, 1);
+  %grafico el histograma acumulado
   histoAcumulado = cumsum(h_monio);
   plot(histoAcumulado);
-  str = sprintf('Histograma acumulado');
+  str = sprintf('Histograma normalizado acumulado con \\lambda = %d, \\gamma = %d', lambda, gamma);
   title(str);
   
-  subplot(1, 2, 2);
+  %grafico el histograma
+  figure;
   bar(h_monio);
-  str = sprintf('Histograma modificado suavizado');
+  str = sprintf('Histograma normalizado modificado suavizado con \\lambda = %d, \\gamma = %d', lambda, gamma);
   title(str);
-    
+  
   %genero la imagen
   y = imagen;
   minimo = min (h_monio);
@@ -57,7 +43,7 @@ function [] = histogramaModificadoSuavizado(imagenOriginal, lambda, gamma)
       grisActual = imagen(fila, columna);
       y(fila, columna) = valorEnRango(minimo, histoAcumulado(grisActual));
     end
-  end 
+  end    
   
   %muestro la imagen
   figure;

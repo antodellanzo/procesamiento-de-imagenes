@@ -1,4 +1,10 @@
-function [y] = ecualizacion(imagen)
+function [y] = ecualizacion(imagenOriginal)
+    if size(imagenOriginal) > 2
+        imagen = imagenOriginal(:, :, 1);
+    else
+        imagen = imagenOriginal;
+    end
+
   %inicializo un vector que va a contener el histograma
   histogramaNormalizado = zeros(1, 256);
   [filas, columnas] = size(imagen);
@@ -8,10 +14,12 @@ function [y] = ecualizacion(imagen)
     % tengo el nivel de gris i - 1
     histogramaNormalizado(i) = grises / (filas*columnas);
   end
+  
+  figure, plot(histogramaNormalizado), title('histograma normalizado');
+  
   %histogramaNormalizado pasa a tener los valores acumulados
-  for index = 2 : 1 : 256
-    histogramaNormalizado(index) = histogramaNormalizado(index) + histogramaNormalizado(index - 1);
-  end
+  histogramaNormalizado = cumsum(histogramaNormalizado);
+  
   minimo = min (histogramaNormalizado);
   y = imagen;
   for fila = 1 : 1 : filas
@@ -24,6 +32,9 @@ function [y] = ecualizacion(imagen)
       y(fila, columna) = valorEnRango(minimo, sactual);
     end
   end
+  
+  figure, imshow(y), title('imagen ecualizada');
+  figure, bar(histogramaNormalizado), title('histograma normalizado');
 end
 
 function [x] = valorEnRango(smin, sactual)

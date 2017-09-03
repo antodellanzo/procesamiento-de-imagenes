@@ -1,15 +1,36 @@
 function [nuevaImagen] = hsiToRgb(imagen, mostrarImagen)
-nuevaImagen = getImage(imagen);
-if mostrarImagen == true
-    figure;
-    subplot(2, 2, 1), imshow(nuevaImagen), title('imagen en rgb');
-    subplot(2, 2, 2), imshow(nuevaImagen(:, :, 1)), title('r');
-    subplot(2, 2, 3), imshow(nuevaImagen(:, :, 2)), title('g');
-    subplot(2, 2, 4), imshow(nuevaImagen(:, :, 3)), title('b');
-end
+    nuevaImagen = zeros(size(imagen));
+    [filas, columnas, canales] = size(imagen);
+    for fila = 1 : 1 : filas
+        for columna = 1 : 1 : columnas
+            H = double(imagen(fila, columna, 1))*(2 * pi);
+            S = double(imagen(fila, columna, 2));
+            I = double(imagen(fila, columna, 3));
+            nuevaImagen(fila, columna, 1) = getR(H, S, I);
+            nuevaImagen(fila, columna, 2) = getG(H, S, I);
+            nuevaImagen(fila, columna, 3) = getB(H, S, I);
+        end
+    end
+    %{
+    nuevaImagen = zeros(size(imagen));
+    H = double(imagen(:, :, 1)) .* (2*pi);
+    S = double(imagen(:, :, 2));
+    I = double(imagen(:, :, 3));
+    nuevaImagen(:, :, 1) = getR(H, S, I);
+    nuevaImagen(:, :, 2) = getG(H, S, I);
+    nuevaImagen(:, :, 3) = getB(H, S, I);
+    %}
+    
+    if mostrarImagen == true
+        figure;
+        subplot(2, 2, 1), imshow(nuevaImagen), title('imagen en rgb');
+        subplot(2, 2, 2), imshow(nuevaImagen(:, :, 1)), title('r');
+        subplot(2, 2, 3), imshow(nuevaImagen(:, :, 2)), title('g');
+        subplot(2, 2, 4), imshow(nuevaImagen(:, :, 3)), title('b');
+    end
 end
 
-function [imagenEnRGB] = getImage(imagen)
+function [imagenEnRGB] = getImage(imagnRGB)
 H = double(imagen(:, :, 1)) .* 360;
 S = double(imagen(:, :, 2));
 I = double(imagen(:, :, 3));
@@ -19,29 +40,18 @@ B = zeros(size(H));
 
 primerSector = find(H < 120);
 segundoSector = find(H >= 120 & H < 240);
-tercerSector = find(H >= 240 & H < 360);
+tercerSector = find(H >= 240);
 
 %primer sector --> 0 <= H < 120
 B( primerSector) = I(primerSector) .* (1 - S(primerSector));
-R(primerSector) = I(primerSector) .* ( 1 + ( ( S(primerSector) .* cosd(H(primerSector)) ) ./ (cosd(60 - H(primerSector) ) ) ) );
-G(primerSector) = (3 .* I(primerSector)) - (R(primerSector) + B(primerSector));
+R(primerSector) = I(primerSector) * ( 1 + ( ( S(primerSector) .* cos(H(primerSector)) ) ./ (cos(60 - H(primerSector) ) ) ) );
+G(primerSector) = (3 .* I(primerSector)) - (R + B);
 
 %segundo sector -> 120 <= H < 240
 H = H - 120;
 R(segundoSector) = I(segundoSector) .* (1 - S(segundoSector));
-G(segundoSector) = I(segundoSector) .* ( 1 + ( (S(segundoSector) .* cosd(H(segundoSector))) ./ (cosd(60 - H(segundoSector))) ) );
-B(segundoSector) = (3.*I(segundoSector)) - (R(segundoSector) + G(segundoSector));
+G(segundoSector) = I(segundoSector) .* ( 1 + ( () .* () ) )
 
-%tercer sector -> 240 < H <= 360
-H = H - 120;
-G(tercerSector) = I(tercerSector) .* (1 - S(tercerSector));
-B(tercerSector) = I(tercerSector) .* ( 1 + ( (S(tercerSector).*cosd(H(tercerSector))) ./ (cosd(60 - H(tercerSector))) ) );
-R(tercerSector) = (3.*I(tercerSector)) - (G(tercerSector) + B(tercerSector));
-
-%generar imagen
-imagenEnRGB(:, :, 1) = R;
-imagenEnRGB(:, :, 2) = G;
-imagenEnRGB(:, :, 3) = B;
 end
 
 %{

@@ -1,9 +1,10 @@
 function [nuevaImagen] = rgbToHsi(imagen, mostrarImagenes)
-nuevaImagen = zeros(size(imagen));
+%[filas, columnas, s] = size(imagen);
+%nuevaImagen = double(zeros(filas, columnas));
 R = double(imagen(:, :, 1)) / 255.0;
 G = double(imagen(:, :, 2)) / 255.0;
 B = double(imagen(:, :, 3)) / 255.0;
-nuevaImagen(:, :, 1) = getH(R, G, B);
+nuevaImagen(:, :, 1) = getH(R, G, B) / (2*pi);
 nuevaImagen(:, :, 2) = getS(R, G, B);
 nuevaImagen(:, :, 3) = getI(R, G, B);
 
@@ -23,7 +24,7 @@ operandoAbajo = ( (( R - G ).*( R - G )) + (( R - B ).*( G - B )) ) .^ (0.5);
 H = acos( (operandoArriba ./ (operandoAbajo+realmin('double')) ) );
 mayores = find(B > G);
 H(mayores) = 2*pi - H(mayores);
-H = H ./ (2*pi);
+H = H / (2*
 end
 
 function [S] = getS(R, G, B)

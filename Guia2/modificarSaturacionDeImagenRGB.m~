@@ -1,0 +1,11 @@
+function [] = modificarSaturacionDeImagenRGB(imagenEnRGB)
+imagenEnHSI = rgbToHsi(imagenEnRGB, false);
+S = imagenEnHSI(:, :, 2);
+
+c = [0.25, 0.5, 0.75, 2, 4];
+for constante = c
+   nuevaS = S .* constante;
+   imagenEnHSI(:, :, 2) = 
+end
+
+end

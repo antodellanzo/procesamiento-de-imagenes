@@ -1,4 +1,4 @@
-function [y] = ecualizacion(imagenOriginal)
+function [y] = ecualizacion(imagenOriginal, mostrarImagen)
     if size(imagenOriginal) > 2
         imagen = imagenOriginal(:, :, 1);
     else
@@ -15,7 +15,9 @@ function [y] = ecualizacion(imagenOriginal)
     histogramaNormalizado(i) = grises / (filas*columnas);
   end
   
-  figure, plot(histogramaNormalizado), title('histograma normalizado');
+  if mostrarImagen == true
+      figure, plot(histogramaNormalizado), title('histograma normalizado');
+  end
   
   %histogramaNormalizado pasa a tener los valores acumulados
   histogramaNormalizado = cumsum(histogramaNormalizado);
@@ -33,8 +35,10 @@ function [y] = ecualizacion(imagenOriginal)
     end
   end
   
-  figure, imshow(y), title('imagen ecualizada');
-  figure, bar(histogramaNormalizado), title('histograma normalizado');
+  if mostrarImagen == true
+      figure, imshow(y), title('imagen ecualizada');
+      figure, bar(histogramaNormalizado), title('histograma normalizado');
+  end
 end
 
 function [x] = valorEnRango(smin, sactual)

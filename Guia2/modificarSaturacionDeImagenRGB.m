@@ -9,5 +9,4 @@ for constante = c
    str = sprintf('imagen en hsi por constante %f', constante);
    figure, imshow(hsiToRgb(imagenEnHSI, false)), title(str);
 end
-
 end

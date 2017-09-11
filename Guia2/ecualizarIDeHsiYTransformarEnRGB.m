@@ -1,4 +1,11 @@
-function [] = ecualizarIDeHsiYTransformarEnRGB(imagenEnRGB)
+function [imagenRGBConIEcualizado] = ecualizarIDeHsiYTransformarEnRGB(imagenEnRGB)
+    [filas, columnas, canales] = size(imagenEnRGB);
+    if canales ~= 3
+        throw('El canal debe tener 3 canales')
+    end
+    if isa(imagenEnRGB, 'uint8') ~= 1
+        throw('La imagen debe ser de enteros de 8 bits')
+    end
     imagenEnHSI = rgbToHsi(imagenEnRGB, false);
     I = im2uint8(imagenEnHSI(:, :, 3));
     

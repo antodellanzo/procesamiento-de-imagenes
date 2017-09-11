@@ -1,7 +1,15 @@
 function [] = alterarHue(imagenEnRGB)
+[filas, columnas, canales] = size(imagenEnRGB);
+if canales ~= 3
+    throw('El canal debe tener 3 canales')
+end
+if isa(imagenEnRGB, 'uint8') ~= 1
+    throw('La imagen debe ser de enteros de 8 bits')
+end
+
 imagenEnHSI = rgbToHsi(imagenEnRGB, false);
 
-c = [-45, -90, -145, -180, 45, 90, 145, 180];
+c = [20, 45, 60, 90, 140, 180, 240, 300];
 for angulo = c
    figure;
    subplot(1, 2, 1), imshow(imagenEnRGB), title('imagen original');

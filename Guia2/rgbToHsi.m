@@ -1,4 +1,11 @@
 function [nuevaImagen] = rgbToHsi(imagen, mostrarImagenes)
+[filas, columnas, canales] = size(imagen);
+if canales ~= 3
+    throw('El canal debe tener 3 canales')
+end
+if isa(imagen, 'uint8') ~= 1
+    throw('La imagen debe ser de enteros de 8 bits')
+end
 nuevaImagen = zeros(size(imagen));
 R = double(imagen(:, :, 1)) / 255.0;
 G = double(imagen(:, :, 2)) / 255.0;
@@ -24,12 +31,15 @@ H = acos( (operandoArriba ./ (operandoAbajo+realmin('double')) ) );
 mayores = find(B > G);
 H(mayores) = 2*pi - H(mayores);
 H = H ./ (2*pi);
+H(H < 0) = 0;
 end
 
 function [S] = getS(R, G, B)
 S = 1 - ( ( 3 ./ ((R + G + B)+realmin('double')) ) .* min(min(R, G), B) );
+S(S < 0) = 0;
 end
 
 function [I] = getI(R, G, B)
 I = (R + G + B) ./ 3;
+I(I < 0) = 0;
 end

@@ -1,4 +1,11 @@
 function [nuevaImagen] = hsiToRgb(imagen, mostrarImagen)
+[filas, columnas, canales] = size(imagen);
+if canales ~= 3
+    throw('El canal debe tener 3 canales')
+end
+if isa(imagen, 'double') ~= 1
+    throw('La imagen debe ser de doubles')
+end
 nuevaImagen = getImage(imagen);
 if mostrarImagen == true
     figure;
@@ -45,6 +52,8 @@ imagenEnRGB(:, :, 3) = B;
 end
 
 %{
+%realización usando doubles en vez de grados para el calculo -- se parte
+%con valores de pi en vez de 360
 function [r] = getR(H, S, I)
 r = zeros(size(H));
 primerSeccion = find( H < (2/3)*pi);
@@ -88,47 +97,5 @@ r = I .* (1 - S);
 b(segundaSeccion) = (3.*I(segundaSeccion)) - (r(segundaSeccion) + g(segundaSeccion));
 
 b(terceraSeccion) = I(terceraSeccion) .* ( 1 + ( ( S(terceraSeccion) .* cos( H(terceraSeccion) - ( (4 / 3)*pi ) ) ) ./ cos( ( pi / 3 ) - ( H(terceraSeccion) - ( (4 / 3)*pi) )  ) ) );
-end
-
-function [r] = getR(H, S, I)
-    if H >= 0 && H < (2 / 3)*pi
-        r = I * ( 1 + ( ( S * cos(H) ) / cos ( (pi/3) - H ) ) );
-    else
-        if H >= (2 / 3)*pi && H < (4 / 3)*pi
-            r = I * ( 1 - S );
-        else
-            G = I * (1 - S);
-            B = I * ( 1 + ( ( S * cos( H - ( (4 / 3)*pi ) ) ) / cos( ( pi / 3 ) - ( H - ( (4 / 3)*pi) )  ) ) );
-            r = (3*I) - (G + B);
-        end
-    end
-end
-
-function [g] = getG(H, S, I)
-    if H >= 0 && H < (2 / 3)*pi
-        R = I * ( 1 + ( ( S * cos(H) ) / cos ( (pi/3) - H ) ) );
-        B = I * (1 - S);
-        g = (3*I) - (R + B);
-    else
-        if H >= (2 / 3)*pi && H < (4 / 3)*pi
-            g = I * ( 1 + ( ( S * cos( H - ((2/3)*pi) ) ) / cos( (pi/3) - (H - ( (2/3)*pi) ) ) ) );
-        else
-            g = I * (1 - S);
-        end
-    end
-end
-
-function [b] = getB(H, S, I)
-    if H >= 0 && H < (2 / 3)*pi
-        b = I * (1 - S);
-    else
-        if H >= (2 / 3)*pi && H < (4 / 3)*pi
-            g = I * ( 1 + ( ( S * cos( H - ((2/3)*pi) ) ) / cos( (pi/3) - (H - ( (2/3)*pi) ) ) ) );
-            r = I*(1 - S);
-            b = (3*I) - (r + g);
-        else
-            b = I * ( 1 + ( ( S * cos( H - ( (4 / 3)*pi ) ) ) / cos( ( pi / 3 ) - ( H - ( (4 / 3)*pi) )  ) ) );
-        end
-    end
 end
 %}

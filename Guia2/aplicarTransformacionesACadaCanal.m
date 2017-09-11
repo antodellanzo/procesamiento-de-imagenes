@@ -1,4 +1,11 @@
-function [] = aplicarTransformacionesACadaCanal(imagen)
+function [imagenTransformada] = aplicarTransformacionesACadaCanal(imagen)
+[filas, columnas, canales] = size(imagen);
+if canales ~= 3
+    throw('El canal debe tener 3 canales')
+end
+if isa(imagen, 'uint8') ~= 1
+    throw('La imagen debe ser de enteros de 8 bits')
+end
 imagenHSI = rgbToHsi(imagen, false);
 figure;
 subplot(2, 2, 1), imshow(imagenHSI), title('imagen en hsi');
@@ -14,7 +21,9 @@ subplot(2, 2, 4), imshow(hsiToRgb(imagenConITransformada, false)), title('imagen
 
 figure;
 subplot(1, 2, 1), imshow(imagen), title('imagen original');
-subplot(1, 2, 2), imshow(hsiToRgb(transformarTodas(imagenHSI), false)), title('imagen con todas las transformaciones juntas');
+imagenTransformada = hsiToRgb(transformarTodas(imagenHSI), false);
+subplot(1, 2, 2), imshow(imagenTransformada), title('imagen con todas las transformaciones juntas');
+figure, imshow(imagenTransformada), title('imagen transformada');
 end
 
 function [nuevaImagen] = transformarTodas(imagenHSI)
@@ -29,7 +38,7 @@ H = nuevaImagen(:, :, 1);
 %muevo a H entre 0 y 360°
 H = H .* 360;
 %transformo H
-H = H + (10);
+H = H + (40);   %sumo 40° al canal H de la imagen hsi
 %veo los valores que se pasaron de 360°
 n = find (H >= 360);
 H(n) = 360 - H(n);

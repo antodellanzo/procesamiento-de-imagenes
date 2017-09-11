@@ -1,7 +1,8 @@
-function [] = getHistogramas(imagen)
+function [] = histogramasDeImagenRGB(imagen)
     [filas, columnas, canales] = size(imagen);
-    for i = 1 : 1 : canales
-        str = sprintf('histograma %d', i);
-        figure, imhist(imagen(:, :, i)), title(str);
+    if canales == 3
+        figure, imhist(imagen(:, :, 1)), title('Histograma de canal R');
+        figure, imhist(imagen(:, :, 2)), title('Histograma de canal G');
+        figure, imhist(imagen(:, :, 3)), title('Histograma de canal B');
     end
 end

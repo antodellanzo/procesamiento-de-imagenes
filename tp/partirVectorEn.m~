@@ -1,0 +1,12 @@
+function [vectorDeHistogramas] = partirVectorEn( vector, k )
+[filas, columnas] = size(vector);
+vectorIguales = uint8( floor( columnas / k ) );
+
+%{
+[filas, columnas] = size(vector);
+vectorIguales = uint8( floor( columnas / k ) );
+vectorNuevo = ones(1, vectorIguales) .* k;
+vectorNuevo( vectorIguales + 1 ) = k - (vectorIguales);   
+vectorDeHistogramas = mat2cell(vector, 1, vectorNuevo);
+%}
+end

@@ -1,0 +1,12 @@
+function [h_t_k] = dameH_t_k(h)
+   
+
+end
+
+
+function [y] = (h, alpha, betha)
+identidad = eye(256);
+primerOperando = 1 / (identidad .* ( alpha + betha ) );
+segundoOperando = ( alpha .* h ) + ( betha .* histogramaUniforme(h) );
+y = primerOperando * segundoOperando;
+end

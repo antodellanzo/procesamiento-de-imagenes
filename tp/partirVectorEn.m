@@ -1,6 +1,8 @@
-function [vectorDeHistogramas] = partirVectorEn( vector, k )
+function [vectorDeHistogramas] = partirVectorEn( vectorDeEntrada, k )
+vector = transpose(vectorDeEntrada);
 [filas, columnas] = size(vector);
-tamanoDeCadaVector = uint8( ceil( columnas / k ) );
+columnas = uint16(columnas);
+tamanoDeCadaVector = uint16( ceil( columnas / k ) );
 indiceEnVectorDeSalida = 1;
 vectorDeHistogramas = cell(1, k);
 for indice = 1 : tamanoDeCadaVector : columnas
@@ -10,6 +12,7 @@ for indice = 1 : tamanoDeCadaVector : columnas
     else
         nuevoV( indice : columnas ) = vector (indice : columnas );
     end
+    figure, bar(nuevoV), title('histo intermedio');
     vectorDeHistogramas{indiceEnVectorDeSalida} = nuevoV;
     indiceEnVectorDeSalida = indiceEnVectorDeSalida + 1;
 end

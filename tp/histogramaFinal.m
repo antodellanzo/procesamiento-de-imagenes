@@ -9,7 +9,7 @@ for i = 1 : 1 : 256
         for j = 1 : 1 : columnas
             acum = acum + dameW_k( vectorDeHistogramas{j}, i );
         end
-        h_k_t = histograma_t_k( vectorDeHistogramas{i}, alpha, betha );
+        h_k_t = histograma_t_k( vectorDeHistogramas{k}, alpha, betha );
         h(i) = h(i) + ( ( dameW_k( vectorDeHistogramas{k}, i ) / acum ) *  ( h_k_t(i) ) );
     end
 end
@@ -29,8 +29,13 @@ end
 
 function [p, u] = posicionPrimerYUltimoGris(h)
 mayoresACero = find(h > 0);
-p = mayoresACero(1);
 [f, columnas] = size(mayoresACero);
+if columnas == 0
+    p = 0;
+    u = 0;
+    return
+end
+p = mayoresACero(1);
 u = mayoresACero(columnas);
 end
 

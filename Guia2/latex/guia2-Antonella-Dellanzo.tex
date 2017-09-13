@@ -81,6 +81,8 @@ Por ejemplo, al ejecutarlo con la imagen llamada \textit{1908xx.png}, se obtuvie
 
 El archivo correspondiente a este inciso se llama \textbf{rgbToHsi.m} y toma dos parámetros de entrada: la imagen y un booleano que indica si se desea generar una figura que muestra la imagen final en formato HSI, el canal H, el canal S y el canal I. La función devuelve la nueva imagen en HSI.
 
+El problema con el que me encontré en la resolución de este inciso fue que, al intentar obtener los canales Hue y Saturación, estaba realizando una división por cero y me quedaban valores no válidos en la matriz. Si bien en la imagen final en HSI esto no era notorio, al realizar luego la transformación de HSI a RGB perdía píxeles de la imagen, los cuales quedaban negros. Para solucionar esto, siempre que realizo una división, me aseguro de que haya un valor mayor a cero. Para esto, matlab cuenta con una función que devuelve el mínimo valor de double (\textit{realmin('double')}).
+
 Por ejemplo, al ejecutarlo con la imagen llamada \textit{1901xx.png}, se obtuvieron los siguientes resultados:
 
 \begin{figure}[H]

@@ -123,6 +123,8 @@ genera una figura en la que se muestra la imagen original, la imagen en hsi, la 
 \item \textbf{hsiToRgb.m}: Toma como parámetro de entrada una imagen en hsi que debe ser de 3 canales y de doubles, y un booleano que indica si se desea generar una figura que muestra la nueva imagen en RGB, junto con sus canales R, G y B.
 \end{itemize}
 
+Un problema con el que me encontré al realizar la transformación de hsi a rgb fue que, al decidir trabajar con grados en vez de radianes, tuve que recurrir a utilizar una función provista por matlab que calcula el coseno de un grado (\textit{cosd(x)}).
+
 Por ejemplo, al ejecutarlo con la imagen llamada \textit{1892xxx.png}, se obtuvieron los siguientes resultados:
 
 \begin{figure}[H]
@@ -272,10 +274,12 @@ El archivo correspondiente a este inciso se llama \textbf{transformacionesLineal
 \begin{itemize}
 \item $S = 1 - S$
 \item $S = S * S$
-\item $S = log(S)$
+\item $S = log(S + 1)$
 \item En esta aplico una transformación de forma tal que la saturación vaya aumentando de izquierda a derecha
 \item En esta aplico una transformación de forma tal que la saturación vaya aumentando de derecha a izquierda
 \end{itemize}
+
+Para la anteúltima transformación, lo que hice fue generar una matriz diagonal que posee los números ascendientes uno a uno iniciando por el valor 1 y terminando en el valor \textit{cantidadDeColumasDeCanalDeSaturación}), y luego multipliqué dicha diagonal con el canal de saturación para obtener el final. Para la última hice lo mismo pero disminuyendo desde la cantidad de columnas hasta 1.
 
 A continuación presento ejemplos de las transformaciones aplicadas a la imagen llamada \textit{1908xxx.png}:
 
@@ -297,8 +301,8 @@ A continuación presento ejemplos de las transformaciones aplicadas a la imagen 
     \end{subfigure}\hfill
 	\begin{subfigure}{0.5\textwidth}
 	\centering
-        \includegraphics[width=0.9\textwidth]{transf3.png}
-    \subcaption{$S = log(S)$}
+        \includegraphics[width=0.9\textwidth]{transformacionLog.png}
+    \subcaption{$S = log(S + 1)$}
     \end{subfigure}\hfill
 	\begin{subfigure}{0.5\textwidth}
 	\centering

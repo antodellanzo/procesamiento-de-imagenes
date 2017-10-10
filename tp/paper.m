@@ -10,6 +10,6 @@ figure, bar(h), title('histograma final');
 canalVTrasnformado = especificacionHistograma(canalV, h);
 imagenEnHsv(:, :, 3) = canalVTrasnformado;
 imagenTransformada = hsv2rgb(imagenEnHsv);
-%figure, imshow(imagen), title('imagen original');
-%figure, imshow(imagenTransformada), title('imagen final');
+figure, imshow(imagen), title('imagen original');
+figure, imshow(imagenTransformada), title('imagen final');
 end

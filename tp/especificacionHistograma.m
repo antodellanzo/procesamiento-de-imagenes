@@ -1,9 +1,9 @@
 function [y] = especificacionHistograma(canalV, histogramaBuscado)
-imagen = uint8(canalV .* 255);
+imagen = canalV; %uint8(canalV .* 255);
 L = 256;
 [filas, columnas] = size(imagen);
 %histograma de imagen
-w = transpose(imhist(imagen) ./ (filas*columnas));
+w = transpose(imhist(imagen));
 w = cumsum(w);
 
 w_monio = cumsum(histogramaBuscado);
@@ -19,7 +19,7 @@ end
 
 %genero la imagen
 minimo = min(w_punto);
-y = imagen;
+y = im2uint8(canalV);
 for i = 1 : 1 : filas
     for j = 1 : 1 : columnas
         valorFinal = w_punto(y(i, j) + 1);

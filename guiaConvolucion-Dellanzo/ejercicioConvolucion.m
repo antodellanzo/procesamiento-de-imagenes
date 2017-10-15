@@ -1,0 +1,34 @@
+function [] = ejercicioConvolucion(imagen)
+m1 = ones(3, 3, 'double').*(1/9);
+m2 = (1/16) .* [ 1,2,1;2,4,2;1,2,1 ];
+m3 = [ -1,0;0,-1 ];
+m4 = [ 0,-1;-1,0 ];
+m5 = [ 1,0;0,-1 ];
+m6 = [ 0,1;-1,0 ];
+m7 = [ -1,0,1;-1,0,1;-1,0,1 ]; 
+m8 = [ -1,-1,-1;0,0,0;1,1,1 ];
+m9 = [ -1,0,1; -2,0,2; -1,0,1 ];
+m10 = [ -1,-2,-1;0,0,0;1,2,1 ];
+m11 = [ 0,1,0;1,-4,1;0,1,0 ];
+m12 = [ 1,1,1;1,-8,1;1,1,1 ];
+m13 = [ 0,-1,0;-1,4,-1;0,-1,0 ];
+m14 = [ -1,-1,-1;-1,8,-1;-1,-1,-1 ];
+figure;
+subplot(2,2,1), convolucion(imagen, m1);
+subplot(2,2,2), convolucion(imagen, m2);
+subplot(2,2,3), convolucion(imagen, m3);
+subplot(2,2,4), convolucion(imagen, m4);
+figure;
+subplot(2,2,1), convolucion(imagen, m5);
+subplot(2,2,2), convolucion(imagen, m6);
+subplot(2,2,3), convolucion(imagen, m7);
+subplot(2,2,4), convolucion(imagen, m8);
+figure;
+subplot(2,2,1), convolucion(imagen, m9);
+subplot(2,2,2), convolucion(imagen, m10);
+subplot(2,2,3), convolucion(imagen, m11);
+subplot(2,2,4), convolucion(imagen, m12);
+figure;
+subplot(1,2,1), convolucion(imagen, m13);
+subplot(1,2,2), convolucion(imagen, m14);
+end
